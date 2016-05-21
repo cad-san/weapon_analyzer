@@ -53,7 +53,7 @@ func decodeJSONBattle(r io.Reader) ([]Battle, error) {
 }
 
 func (r rawPlayerJSON) getBattle() Battle {
-	b := Battle{id: r.ID, rule : r.Rule.Key}
+	b := Battle{id: r.ID, rule: r.Rule.Key}
 	for _, p := range r.Players {
 		switch p.Team {
 		case "my":
