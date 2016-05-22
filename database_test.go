@@ -40,3 +40,26 @@ func TestInsertBattle(t *testing.T) {
 		t.Fatalf("insert error :%v", err)
 	}
 }
+
+func TestGetBattle(t *testing.T) {
+	handle, err := CreateDBHandle(":memory:")
+	if err != nil {
+		t.Fatalf("create database error :%v", err)
+	}
+	defer handle.Close()
+	err = handle.PrepareBattle()
+	if err != nil {
+		t.Fatalf("create table error :%v", err)
+	}
+	err = handle.InsertBattle(&dummyBattle)
+	if err != nil {
+		t.Fatalf("insert error :%v", err)
+	}
+	b, err := handle.GetBattles(0, 1)
+	if err != nil {
+		t.Fatalf("get error :%v", err)
+	}
+	if len(b) != 1 {
+		t.Errorf("length of battle slice must be 1 but%v", len(b))
+	}
+}

@@ -8,7 +8,7 @@ import (
 )
 
 type BattleTable struct {
-	BattleID int    `column:"battle_id"`
+	BattleID int    `column:"battle_id" db:"unique"`
 	Rule     string `column:"rule"`
 }
 
@@ -18,6 +18,8 @@ type TeamTable struct {
 	TeamType string `column:"team_type"`
 	Weapon   string `column:"weapon"`
 }
+
+type btSlice []BattleTable
 
 type DBHandle struct {
 	genmai.DB
@@ -68,6 +70,25 @@ func (db *DBHandle) InsertBattle(b *Battle) (err error) {
 	return nil
 }
 
+func (db *DBHandle) GetBattles(nextOf int, num int) ([]Battle, error) {
+	var bTables []BattleTable
+	err := db.Select(&bTables, db.From(&BattleTable{}), db.Where("battle_id", ">", nextOf), db.OrderBy("battle_id", genmai.ASC).Limit(num))
+	if err != nil {
+		return nil, err
+	}
+	idList := btSlice(bTables).getIDs()
+	var teams []TeamTable
+	err = db.Select(&teams, db.From(&TeamTable{}), db.Where("battle_id").In(idList))
+	if err != nil {
+		return nil, err
+	}
+	var battle []Battle
+	for _, bt := range bTables {
+		battle = append(battle, bt.convert(teams))
+	}
+	return battle, err
+}
+
 func (b *Battle) convertColumns() (BattleTable, []TeamTable) {
 	bTable := BattleTable{BattleID: b.id, Rule: b.rule}
 	var team []TeamTable
@@ -88,4 +109,29 @@ func (b *Battle) convertColumns() (BattleTable, []TeamTable) {
 		team = append(team, column)
 	}
 	return bTable, team
+}
+
+func (b *BattleTable) convert(team []TeamTable) Battle {
+	battle := Battle{id: b.BattleID, rule: b.Rule}
+	for _, t := range team {
+		if t.BattleID != b.BattleID {
+			continue
+		}
+		switch t.TeamType {
+		case "A":
+			battle.teamA.weapon = append(battle.teamA.weapon, t.Weapon)
+		case "B":
+			battle.teamB.weapon = append(battle.teamB.weapon, t.Weapon)
+		}
+	}
+	return battle
+}
+
+func (bts btSlice) getIDs() []int {
+	slice := []BattleTable(bts)
+	var ids []int
+	for _, b := range slice {
+		ids = append(ids, b.BattleID)
+	}
+	return ids
 }
