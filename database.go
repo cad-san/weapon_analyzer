@@ -90,6 +90,22 @@ func (db *DBHandle) GetBattles(nextOf int, num int) ([]Battle, error) {
 	return battle, err
 }
 
+func (b *Battle) IsValid() bool {
+	if b.Lobby != "standard" {
+		return false
+	}
+	if b.Rule == "nawabari" {
+		return false
+	}
+	if b.TeamA.Weapon == nil || len(b.TeamA.Weapon) == 0 {
+		return false
+	}
+	if b.TeamB.Weapon == nil || len(b.TeamB.Weapon) == 0 {
+		return false
+	}
+	return true
+}
+
 func (b *Battle) convertColumns() (BattleTable, []TeamTable) {
 	bTable := BattleTable{BattleID: b.ID, Lobby: b.Lobby, Rule: b.Rule}
 	var team []TeamTable
