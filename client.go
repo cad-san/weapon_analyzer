@@ -42,8 +42,16 @@ func (c *InkClient) GetBattle(id int) (*Battle, error) {
 	return decodeJSONBattleSingle(resp.Body)
 }
 
+func (c *InkClient) GetRecentBattle(count int) ([]Battle, error) {
+	return c.getBattleList("", 0, count)
+}
+
 func (c *InkClient) GetBattleOlderThan(id int, count int) ([]Battle, error) {
-	query := buildBattleQuery("older_than", id, count)
+	return c.getBattleList("older_than", id, count)
+}
+
+func (c *InkClient) getBattleList(mode string, id int, count int) ([]Battle, error) {
+	query := buildBattleQuery(mode, id, count)
 	url := statInkBattleAPI + "?" + query.Encode()
 	resp, err := c.Get(url)
 
