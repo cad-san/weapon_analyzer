@@ -20,6 +20,7 @@ type Team struct {
 
 type Battle struct {
 	ID    int
+	Lobby string
 	Rule  string
 	TeamA Team
 	TeamB Team

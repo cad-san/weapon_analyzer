@@ -9,6 +9,7 @@ import (
 
 type BattleTable struct {
 	BattleID int    `column:"battle_id" db:"unique"`
+	Lobby    string `column:"lobby`
 	Rule     string `column:"rule"`
 }
 
@@ -90,7 +91,7 @@ func (db *DBHandle) GetBattles(nextOf int, num int) ([]Battle, error) {
 }
 
 func (b *Battle) convertColumns() (BattleTable, []TeamTable) {
-	bTable := BattleTable{BattleID: b.ID, Rule: b.Rule}
+	bTable := BattleTable{BattleID: b.ID, Lobby: b.Lobby, Rule: b.Rule}
 	var team []TeamTable
 	for _, w := range b.TeamA.Weapon {
 		column := TeamTable{
@@ -112,7 +113,7 @@ func (b *Battle) convertColumns() (BattleTable, []TeamTable) {
 }
 
 func (b *BattleTable) convert(team []TeamTable) Battle {
-	battle := Battle{ID: b.BattleID, Rule: b.Rule}
+	battle := Battle{ID: b.BattleID, Lobby: b.Lobby, Rule: b.Rule}
 	for _, t := range team {
 		if t.BattleID != b.BattleID {
 			continue

@@ -5,8 +5,9 @@ import (
 )
 
 var dummyBattle = Battle{
-	ID:   10000,
-	Rule: "area",
+	ID:    10000,
+	Lobby: "standard",
+	Rule:  "area",
 	TeamA: Team{
 		Weapon: []string{
 			"96gal_deco",

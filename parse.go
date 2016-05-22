@@ -5,22 +5,19 @@ import (
 	"io"
 )
 
-type weapon struct {
-	Key string
-}
-
-type rule struct {
+type strmap struct {
 	Key string
 }
 
 type player struct {
 	Team   string
-	Weapon weapon
+	Weapon strmap
 }
 
 type rawPlayerJSON struct {
 	ID      int
-	Rule    rule
+	Lobby   strmap
+	Rule    strmap
 	Players []player
 }
 
@@ -53,7 +50,7 @@ func decodeJSONBattle(r io.Reader) ([]Battle, error) {
 }
 
 func (r rawPlayerJSON) getBattle() Battle {
-	b := Battle{ID: r.ID, Rule: r.Rule.Key}
+	b := Battle{ID: r.ID, Lobby: r.Lobby.Key, Rule: r.Rule.Key}
 	for _, p := range r.Players {
 		switch p.Team {
 		case "my":
