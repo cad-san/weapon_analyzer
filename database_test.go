@@ -5,18 +5,18 @@ import (
 )
 
 var dummyBattle = Battle{
-	id:   10000,
-	rule: "area",
-	teamA: Team{
-		weapon: []string{
+	ID:   10000,
+	Rule: "area",
+	TeamA: Team{
+		Weapon: []string{
 			"96gal_deco",
 			"liter3k_scope",
 			"splatspinner_collabo",
 			"hydra_custom",
 		},
 	},
-	teamB: Team{
-		weapon: []string{
+	TeamB: Team{
+		Weapon: []string{
 			"sshooter_collabo",
 			"wakaba",
 			"52gal",

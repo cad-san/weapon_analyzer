@@ -90,19 +90,19 @@ func (db *DBHandle) GetBattles(nextOf int, num int) ([]Battle, error) {
 }
 
 func (b *Battle) convertColumns() (BattleTable, []TeamTable) {
-	bTable := BattleTable{BattleID: b.id, Rule: b.rule}
+	bTable := BattleTable{BattleID: b.ID, Rule: b.Rule}
 	var team []TeamTable
-	for _, w := range b.teamA.weapon {
+	for _, w := range b.TeamA.Weapon {
 		column := TeamTable{
-			BattleID: b.id,
+			BattleID: b.ID,
 			TeamType: "A",
 			Weapon:   w,
 		}
 		team = append(team, column)
 	}
-	for _, w := range b.teamB.weapon {
+	for _, w := range b.TeamB.Weapon {
 		column := TeamTable{
-			BattleID: b.id,
+			BattleID: b.ID,
 			TeamType: "B",
 			Weapon:   w,
 		}
@@ -112,16 +112,16 @@ func (b *Battle) convertColumns() (BattleTable, []TeamTable) {
 }
 
 func (b *BattleTable) convert(team []TeamTable) Battle {
-	battle := Battle{id: b.BattleID, rule: b.Rule}
+	battle := Battle{ID: b.BattleID, Rule: b.Rule}
 	for _, t := range team {
 		if t.BattleID != b.BattleID {
 			continue
 		}
 		switch t.TeamType {
 		case "A":
-			battle.teamA.weapon = append(battle.teamA.weapon, t.Weapon)
+			battle.TeamA.Weapon = append(battle.TeamA.Weapon, t.Weapon)
 		case "B":
-			battle.teamB.weapon = append(battle.teamB.weapon, t.Weapon)
+			battle.TeamB.Weapon = append(battle.TeamB.Weapon, t.Weapon)
 		}
 	}
 	return battle

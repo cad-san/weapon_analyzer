@@ -15,14 +15,14 @@ type InkClient struct {
 }
 
 type Team struct {
-	weapon []string
+	Weapon []string
 }
 
 type Battle struct {
-	id    int
-	rule  string
-	teamA Team
-	teamB Team
+	ID    int
+	Rule  string
+	TeamA Team
+	TeamB Team
 }
 
 func CreateClient() *InkClient {
