@@ -63,3 +63,19 @@ func (r rawPlayerJSON) getBattle() Battle {
 	}
 	return b
 }
+
+func decodeJSONWeaponKeys(r io.Reader) ([]string, error) {
+	d := json.NewDecoder(r)
+	var raw []strmap
+
+	err := d.Decode(&raw)
+	if err != nil {
+		return nil, err
+	}
+
+	var list []string
+	for _, r := range raw {
+		list = append(list, r.Key)
+	}
+	return list, nil
+}

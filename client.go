@@ -8,6 +8,7 @@ import (
 
 const (
 	statInkBattleAPI = "https://stat.ink/api/v1/battle"
+	statInkWeaponAPI = "https://stat.ink/api/v1/weapon"
 )
 
 type InkClient struct {
@@ -49,6 +50,18 @@ func (c *InkClient) GetRecentBattle(count int) ([]Battle, error) {
 
 func (c *InkClient) GetBattleOlderThan(id int, count int) ([]Battle, error) {
 	return c.getBattleList("older_than", id, count)
+}
+
+func (c *InkClient) GetWeaponKeyList() ([]string, error) {
+	resp, err := c.Get(statInkWeaponAPI)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	weapons, err := decodeJSONWeaponKeys(resp.Body)
+	return weapons, err
 }
 
 func (c *InkClient) getBattleList(mode string, id int, count int) ([]Battle, error) {
