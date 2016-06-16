@@ -94,7 +94,7 @@ func (b *Battle) IsValid() bool {
 	if b.Lobby != "standard" {
 		return false
 	}
-	if b.Rule == "nawabari" || len(b.Rule) == 0{
+	if b.Rule == "nawabari" || len(b.Rule) == 0 {
 		return false
 	}
 	if b.TeamA.Weapon == nil || len(b.TeamA.Weapon) != 4 {
